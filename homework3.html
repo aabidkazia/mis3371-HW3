@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<!--
+  Program name: homework3.html
+  Author: Student Name
+  Date created: April 1, 2026
+  Date last edited: April 14, 2026
+  Version: 3.0
+  Description: Patient registration form for Aabids Medical Clinic.
+  Built on top of homework 2. The big change this time is that ALL
+  validation is done with JavaScript on the fly as the user types or
+  leaves each field. I kept the HTML patterns in there too ("belts and
+  suspenders" as the professor says) but the JS does the real work now.
+  The submit button only appears once there are zero errors on the page.
+  External CSS: style.css
+  External JS: validation.js
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aabids Medical Clinic - Patient Registration</title>
+  <link href="style.css" rel="stylesheet">
+  <script src="validation.js"></script>
+</head>
+
+<body onload="initPage();">
+
+<!-- =====================================================
+     BANNER
+     Logo, clinic name, dynamic date
+     ===================================================== -->
+<div id="banner">
+  <div id="banner-logo">
+    <!-- inline SVG cross, no external image file needed -->
+    <svg width="72" height="72" viewBox="0 0 72 72"
+         xmlns="http://www.w3.org/2000/svg" aria-label="Aabids Medical Clinic logo">
+      <circle cx="36" cy="36" r="34" fill="#1a56db" stroke="#fff" stroke-width="3"/>
+      <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+      <rect x="29" y="14" width="14" height="44" rx="5" fill="#fff"/>
+      <rect x="14" y="29" width="44" height="14" rx="5" fill="#fff"/>
+    </svg>
+  </div>
+  <div id="banner-text">
+    <h1>Aabids Medical Clinic</h1>
+    <p id="dynamic-date"></p>
+    <p id="banner-tagline">Your Health, Our Priority</p>
+  </div>
+</div>
+
+<!-- =====================================================
+     PAGE WRAPPER - form left, review panel right
+     ===================================================== -->
+<div id="page-wrapper">
+
+<!-- LEFT: the form -->
+<div id="main-content">
+
+  <h2>New Patient Registration</h2>
+  <p class="form-intro">
+    Fields marked <span class="req">*</span> are required.
+    Hover over any field for help. Use <kbd>Tab</kbd> to move between fields.
+    Errors will appear below each field as you go — fix them all before submitting.
+  </p>
+
+  <!-- error count banner - hidden until there are actual errors -->
+  <div id="error-banner" style="display:none;">
+    <span id="error-count-msg"></span>
+  </div>
+
+  <!--
+    novalidate turns off browser popups so JS handles everything.
+    handleValidate() runs when the Validate button is clicked.
+  -->
+  <form name="patientForm" id="patientForm"
+        onsubmit="return false;"
+        novalidate>
+
+    <!-- =====================================================
+         BLOCK 1 - PERSONAL INFO
+         ===================================================== -->
+    <fieldset>
+      <legend>&#128100; Block 1 &mdash; Personal Information</legend>
+      <table class="form-table">
+
+        <!-- First / MI / Last on same row -->
+        <tr>
+          <td class="lbl"><label for="fname">Name <span class="req">*</span></label></td>
+          <td>
+            <!--
+              oninput: validates as they type
+              onblur: validates when they leave the field
+              keeping HTML pattern too just in case
+            -->
+            <input type="text" id="fname" name="fname"
+                   maxlength="30" size="16"
+                   placeholder="First Name"
+                   tabindex="1"
+                   title="First Name: 1 to 30 characters. Letters, apostrophes, and dashes only. No numbers or special characters."
+                   pattern="[A-Za-z'\-]{1,30}"
+                   required
+                   oninput="validateName('fname', 'fname-err', 'First Name')"
+                   onblur="validateName('fname', 'fname-err', 'First Name')">
+            &nbsp;
+            <label for="mi" class="inline-lbl">MI</label>
+            <input type="text" id="mi" name="mi"
+                   maxlength="1" size="2"
+                   placeholder="M"
+                   tabindex="2"
+                   title="Middle Initial: just one letter. Optional, you can leave it blank."
+                   pattern="[A-Za-z]"
+                   style="width:2.8em; text-align:center;"
+                   oninput="validateMI()"
+                   onblur="validateMI()">
+            &nbsp;
+            <label for="lname" class="inline-lbl">Last <span class="req">*</span></label>
+            <input type="text" id="lname" name="lname"
+                   maxlength="30" size="16"
+                   placeholder="Last Name"
+                   tabindex="3"
+                   title="Last Name: 1 to 30 characters. Letters, apostrophes, and dashes only."
+                   pattern="[A-Za-z'\-\s]{1,30}"
+                   required
+                   oninput="validateName('lname', 'lname-err', 'Last Name')"
+                   onblur="validateName('lname', 'lname-err', 'Last Name')">
+            <!-- error messages below, pre-spaced so page doesn't jump -->
+            <br>
+            <span class="err-msg" id="fname-err"></span>
+            <span class="err-msg" id="mi-err"></span>
+            <span class="err-msg" id="lname-err"></span>
+          </td>
+        </tr>
+
+        <!-- Date of Birth - type=date with min/max set in initPage() -->
+        <tr>
+          <td class="lbl"><label for="dob">Date of Birth <span class="req">*</span></label></td>
+          <td>
+            <input type="date" id="dob" name="dob"
+                   tabindex="4"
+                   title="Date of Birth: must be a real past date. Cannot be today or in the future. Cannot be more than 120 years ago."
+                   required
+                   onchange="validateDOB()"
+                   onblur="validateDOB()">
+            <br><span class="err-msg" id="dob-err"></span>
+            <span class="hint">Must be between 120 years ago and yesterday.</span>
+          </td>
+        </tr>
+
+        <!--
+          SSN - type=password to obscure digits.
+          ADVANCED: auto-formats XXX-XX-XXXX as user types
+          (dashes insert automatically after 3rd and 5th digit)
+        -->
+        <tr>
+          <td class="lbl"><label for="ssn">Social Security # <span class="req">*</span></label></td>
+          <td>
+            <input type="text" id="ssn" name="ssn"
+                   maxlength="11" size="14"
+                   placeholder="XXX-XX-XXXX"
+                   tabindex="5"
+                   title="Social Security Number: 9 digits only, no letters. Dashes are added automatically. Format: XXX-XX-XXXX."
+                   required
+                   oninput="formatSSN()"
+                   onblur="validateSSN()">
+            <br><span class="err-msg" id="ssn-err"></span>
+            <span class="hint">&#128274; Digits only. Dashes are added for you automatically.</span>
+          </td>
+        </tr>
+
+      </table>
+    </fieldset>
+
+    <!-- =====================================================
+         BLOCK 2 - CONTACT INFO
+         ===================================================== -->
+    <fieldset>
+      <legend>&#128222; Block 2 &mdash; Contact Information</legend>
+      <table class="form-table">
+
+        <tr>
+          <td class="lbl"><label for="email">Email Address <span class="req">*</span></label></td>
+          <td>
+            <!--
+              forces lowercase on blur since email addresses should be lowercase.
+              validates format name@domain.tld with regex
+            -->
+            <input type="text" id="email" name="email"
+                   maxlength="80" size="34"
+                   placeholder="name@domain.com"
+                   tabindex="6"
+                   title="Email: must look like name@domain.com - for example patient@gmail.com. Will be converted to lowercase automatically."
+                   pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                   required
+                   oninput="validateEmail()"
+                   onblur="validateEmail(); forceLowercase('email')">
+            <br><span class="err-msg" id="email-err"></span>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="lbl"><label for="phone">Phone Number</label></td>
+          <td>
+            <!-- auto-formats NNN-NNN-NNNN as user types -->
+            <input type="text" id="phone" name="phone"
+                   maxlength="12" size="14"
+                   placeholder="713-555-1234"
+                   tabindex="7"
+                   title="Phone number: digits only, dashes added automatically. Format will be NNN-NNN-NNNN."
+                   pattern="\d{3}-\d{3}-\d{4}"
+                   oninput="formatPhone()"
+                   onblur="validatePhone()">
+            <br><span class="err-msg" id="phone-err"></span>
+            <span class="hint">Optional. Format: NNN-NNN-NNNN</span>
+          </td>
+        </tr>
+
+      </table>
+    </fieldset>
+
+    <!-- =====================================================
+         BLOCK 3 - ADDRESS
+         ===================================================== -->
+    <fieldset>
+      <legend>&#127968; Block 3 &mdash; Home Address</legend>
+      <table class="form-table">
+
+        <tr>
+          <td class="lbl"><label for="addr1">Address Line 1 <span class="req">*</span></label></td>
+          <td>
+            <input type="text" id="addr1" name="addr1"
+                   maxlength="30" size="34"
+                   placeholder="Street number and name"
+                   tabindex="8"
+                   title="Address Line 1: required. At least 2 characters, up to 30."
+                   minlength="2"
+                   required
+                   oninput="validateAddress('addr1', 'addr1-err', true)"
+                   onblur="validateAddress('addr1', 'addr1-err', true)">
+            <br><span class="err-msg" id="addr1-err"></span>
+          </td>
+        </tr>
+
+        <!-- addr2 optional but still validated if filled in -->
+        <tr>
+          <td class="lbl"><label for="addr2">Address Line 2</label></td>
+          <td>
+            <input type="text" id="addr2" name="addr2"
+                   maxlength="30" size="34"
+                   placeholder="Apt, Suite, Unit (optional)"
+                   tabindex="9"
+                   title="Address Line 2: optional. If you type something here it needs at least 2 characters."
+                   minlength="2"
+                   oninput="validateAddress('addr2', 'addr2-err', false)"
+                   onblur="validateAddress('addr2', 'addr2-err', false)">
+            <br><span class="err-msg" id="addr2-err"></span>
+          </td>
+        </tr>
+
+        <!-- City, State, ZIP all on same row -->
+        <tr>
+          <td class="lbl"><label for="city">City / State / ZIP <span class="req">*</span></label></td>
+          <td>
+            <input type="text" id="city" name="city"
+                   maxlength="30" size="18"
+                   placeholder="City"
+                   tabindex="10"
+                   title="City: required. Letters and spaces only, 2 to 30 characters."
+                   pattern="[A-Za-z\s\-\.]{2,30}"
+                   required
+                   oninput="validateCity()"
+                   onblur="validateCity()">
+            &nbsp;
+            <label for="state" class="inline-lbl">State <span class="req">*</span></label>
+            <!-- blank first option forces user to pick something -->
+            <select id="state" name="state" tabindex="11"
+                    title="State: pick your state. You have to choose one, there is no default."
+                    onchange="validateState()">
+              <option value="">(Select State)</option>
+              <option value="AL">AL - Alabama</option>
+              <option value="AK">AK - Alaska</option>
+              <option value="AZ">AZ - Arizona</option>
+              <option value="AR">AR - Arkansas</option>
+              <option value="CA">CA - California</option>
+              <option value="CO">CO - Colorado</option>
+              <option value="CT">CT - Connecticut</option>
+              <option value="DE">DE - Delaware</option>
+              <option value="DC">DC - Dist. of Columbia</option>
+              <option value="FL">FL - Florida</option>
+              <option value="GA">GA - Georgia</option>
+              <option value="HI">HI - Hawaii</option>
+              <option value="ID">ID - Idaho</option>
+              <option value="IL">IL - Illinois</option>
+              <option value="IN">IN - Indiana</option>
+              <option value="IA">IA - Iowa</option>
+              <option value="KS">KS - Kansas</option>
+              <option value="KY">KY - Kentucky</option>
+              <option value="LA">LA - Louisiana</option>
+              <option value="ME">ME - Maine</option>
+              <option value="MD">MD - Maryland</option>
+              <option value="MA">MA - Massachusetts</option>
+              <option value="MI">MI - Michigan</option>
+              <option value="MN">MN - Minnesota</option>
+              <option value="MS">MS - Mississippi</option>
+              <option value="MO">MO - Missouri</option>
+              <option value="MT">MT - Montana</option>
+              <option value="NE">NE - Nebraska</option>
+              <option value="NV">NV - Nevada</option>
+              <option value="NH">NH - New Hampshire</option>
+              <option value="NJ">NJ - New Jersey</option>
+              <option value="NM">NM - New Mexico</option>
+              <option value="NY">NY - New York</option>
+              <option value="NC">NC - North Carolina</option>
+              <option value="ND">ND - North Dakota</option>
+              <option value="OH">OH - Ohio</option>
+              <option value="OK">OK - Oklahoma</option>
+              <option value="OR">OR - Oregon</option>
+              <option value="PA">PA - Pennsylvania</option>
+              <option value="PR">PR - Puerto Rico</option>
+              <option value="RI">RI - Rhode Island</option>
+              <option value="SC">SC - South Carolina</option>
+              <option value="SD">SD - South Dakota</option>
+              <option value="TN">TN - Tennessee</option>
+              <option value="TX">TX - Texas</option>
+              <option value="UT">UT - Utah</option>
+              <option value="VT">VT - Vermont</option>
+              <option value="VA">VA - Virginia</option>
+              <option value="WA">WA - Washington</option>
+              <option value="WV">WV - West Virginia</option>
+              <option value="WI">WI - Wisconsin</option>
+              <option value="WY">WY - Wyoming</option>
+            </select>
+            &nbsp;
+            <label for="zip" class="inline-lbl">ZIP <span class="req">*</span></label>
+            <!--
+              type=text NOT type=number - number strips leading zeros.
+              ZIP codes like 07302 would break if we used number type.
+            -->
+            <input type="text" id="zip" name="zip"
+                   maxlength="5" size="7"
+                   placeholder="77496"
+                   tabindex="12"
+                   title="ZIP Code: exactly 5 digits. Numbers only, no dashes for this field."
+                   pattern="\d{5}"
+                   required
+                   oninput="validateZip()"
+                   onblur="validateZip()">
+            <br>
+            <span class="err-msg" id="city-err"></span>
+            <span class="err-msg" id="state-err"></span>
+            <span class="err-msg" id="zip-err"></span>
+          </td>
+        </tr>
+
+      </table>
+    </fieldset>
+
+    <!-- =====================================================
+         BLOCK 4 - HEALTH AND CHOICES
+         checkboxes, radio buttons, sliders, textarea
+         ===================================================== -->
+    <fieldset>
+      <legend>&#9745; Block 4 &mdash; Health &amp; Preferences</legend>
+
+      <!-- CHECKBOXES - at least 5 required -->
+      <p class="section-note">Check everything below that applies to your medical history:</p>
+      <table class="form-table">
+        <tr>
+          <td class="lbl">Have you had&hellip;</td>
+          <td class="checkbox-group">
+            <label class="cb-label" title="Check if you've previously had Chicken Pox">
+              <input type="checkbox" name="hx_chickenpox" value="chickenpox"> Chicken Pox
+            </label>
+            <label class="cb-label" title="Check if you've previously had Measles">
+              <input type="checkbox" name="hx_measles" value="measles"> Measles
+            </label>
+            <label class="cb-label" title="Check if you've had COVID-19">
+              <input type="checkbox" name="hx_covid" value="covid"> COVID-19
+            </label>
+            <label class="cb-label" title="Check if you've had Small Pox">
+              <input type="checkbox" name="hx_smallpox" value="smallpox"> Small Pox
+            </label>
+            <label class="cb-label" title="Check if you've had a Tetanus shot">
+              <input type="checkbox" name="hx_tetanus" value="tetanus"> Tetanus Shot
+            </label>
+            <label class="cb-label" title="Check if you get an annual flu shot">
+              <input type="checkbox" name="hx_flu" value="flu"> Annual Flu Shot
+            </label>
+            <label class="cb-label" title="Check if you've had the Hepatitis B vaccine">
+              <input type="checkbox" name="hx_hepb" value="hepb"> Hepatitis B
+            </label>
+          </td>
+        </tr>
+      </table>
+
+      <!-- RADIO BUTTONS - 3 sets -->
+      <table class="form-table" style="margin-top:10px;">
+        <tr>
+          <td class="lbl">Gender <span class="req">*</span></td>
+          <td class="radio-group">
+            <label class="rb-label" title="Select Male">
+              <input type="radio" name="gender" value="Male"
+                     onchange="validateRadio('gender','gender-err','Please select a gender.')"> Male
+            </label>
+            <label class="rb-label" title="Select Female">
+              <input type="radio" name="gender" value="Female"
+                     onchange="validateRadio('gender','gender-err','Please select a gender.')"> Female
+            </label>
+            <label class="rb-label" title="Select if you prefer not to specify">
+              <input type="radio" name="gender" value="Other"
+                     onchange="validateRadio('gender','gender-err','Please select a gender.')"> Other
+            </label>
+            <br><span class="err-msg" id="gender-err"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="lbl">Fully Vaccinated? <span class="req">*</span></td>
+          <td class="radio-group">
+            <label class="rb-label" title="Yes - fully vaccinated">
+              <input type="radio" name="vaccinated" value="Yes"
+                     onchange="validateRadio('vaccinated','vaccinated-err','Please answer this.')"> Yes
+            </label>
+            <label class="rb-label" title="No - not vaccinated">
+              <input type="radio" name="vaccinated" value="No"
+                     onchange="validateRadio('vaccinated','vaccinated-err','Please answer this.')"> No
+            </label>
+            <br><span class="err-msg" id="vaccinated-err"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="lbl">Has Insurance? <span class="req">*</span></td>
+          <td class="radio-group">
+            <label class="rb-label" title="Yes - I have health insurance">
+              <input type="radio" name="insurance" value="Yes"
+                     onchange="validateRadio('insurance','insurance-err','Please answer this.')"> Yes
+            </label>
+            <label class="rb-label" title="No - I do not have health insurance">
+              <input type="radio" name="insurance" value="No"
+                     onchange="validateRadio('insurance','insurance-err','Please answer this.')"> No
+            </label>
+            <br><span class="err-msg" id="insurance-err"></span>
+          </td>
+        </tr>
+      </table>
+
+      <!-- SLIDER 1 - health score with live display -->
+      <table class="form-table" style="margin-top:12px;">
+        <tr>
+          <td class="lbl">
+            <label for="healthScore">Overall Health <span class="req">*</span></label>
+          </td>
+          <td>
+            <div class="slider-row">
+              <span class="slider-end">1<br><small>Poor</small></span>
+              <input type="range" id="healthScore" name="healthScore"
+                     min="1" max="10" value="5" step="1"
+                     tabindex="13"
+                     title="Rate your overall health from 1 (very bad) to 10 (excellent)."
+                     oninput="updateSlider('healthScore','healthVal','','')">
+              <span class="slider-end">10<br><small>Excellent</small></span>
+              <span class="slider-current">Score: <strong id="healthVal">5</strong> / 10</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- SLIDER 2 - salary with live dollar formatting -->
+        <tr>
+          <td class="lbl">
+            <label for="salaryBar">Desired Salary</label>
+          </td>
+          <td>
+            <div class="slider-row">
+              <span class="slider-end">$20k</span>
+              <input type="range" id="salaryBar" name="salaryBar"
+                     min="20000" max="200000" value="60000" step="5000"
+                     tabindex="14"
+                     title="Slide to pick your preferred annual salary between $20,000 and $200,000."
+                     oninput="updateSalarySlider()">
+              <span class="slider-end">$200k</span>
+              <span class="slider-current"><strong id="salaryVal">$60,000</strong>/yr</span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <!-- TEXTAREA - optional, no quotes allowed -->
+      <table class="form-table" style="margin-top:8px;">
+        <tr>
+          <td class="lbl"><label for="symptoms">Current Symptoms</label></td>
+          <td>
+            <textarea id="symptoms" name="symptoms"
+                      rows="5" cols="55"
+                      tabindex="15"
+                      title="Optional - describe your symptoms, how long you've had them, and how bad they are. Please don't use quotation marks."
+                      placeholder="Describe your symptoms here (optional). Please avoid quotation marks."
+                      oninput="validateSymptoms()"
+                      onblur="validateSymptoms()"></textarea>
+            <br><span class="err-msg" id="symptoms-err"></span>
+            <span class="hint">Optional. Please avoid &quot; quotation marks in this box.</span>
+          </td>
+        </tr>
+      </table>
+
+    </fieldset>
+
+    <!-- =====================================================
+         BLOCK 5 - ACCOUNT SETUP
+         User ID with strict rules, password with strength check,
+         confirm password with live match comparison
+         ===================================================== -->
+    <fieldset>
+      <legend>&#128274; Block 5 &mdash; Account Setup</legend>
+      <table class="form-table">
+
+        <!--
+          User ID rules:
+          - 5 to 20 characters
+          - must start with a letter (not a number)
+          - letters, numbers, dash, underscore only
+          - no spaces or special characters
+          - auto-lowercased on blur
+        -->
+        <tr>
+          <td class="lbl"><label for="userid">User ID <span class="req">*</span></label></td>
+          <td>
+            <input type="text" id="userid" name="userid"
+                   maxlength="20" size="22"
+                   placeholder="Pick a username"
+                   tabindex="16"
+                   title="User ID: 5 to 20 characters. MUST start with a letter, not a number. Letters, numbers, dashes, and underscores only. No spaces. Will be auto-converted to lowercase."
+                   pattern="[A-Za-z][A-Za-z0-9_\-]{4,19}"
+                   required
+                   oninput="validateUserID()"
+                   onblur="validateUserID(); forceLowercase('userid')">
+            <br><span class="err-msg" id="userid-err"></span>
+            <span class="hint">5-20 chars. Start with a letter. No spaces. Auto-lowercased.</span>
+          </td>
+        </tr>
+
+        <!-- Password - live strength meter, must meet 4 criteria -->
+        <tr>
+          <td class="lbl"><label for="passid">Password <span class="req">*</span></label></td>
+          <td>
+            <input type="password" id="passid" name="passid"
+                   maxlength="30" size="22"
+                   placeholder="At least 8 characters"
+                   tabindex="17"
+                   title="Password: 8 to 30 characters. Must have at least 1 uppercase letter, 1 lowercase letter, and 1 number. No quotation marks. Cannot be the same as your User ID."
+                   required
+                   oninput="validatePassword(); checkPasswordMatch()"
+                   onblur="validatePassword()">
+            <br><span class="err-msg" id="passid-err"></span>
+            <!-- strength bar -->
+            <div id="strength-bar-wrap">
+              <div id="strength-bar"></div>
+            </div>
+            <span id="strength-label" class="hint"></span>
+          </td>
+        </tr>
+
+        <!-- Confirm password - live match check as you type -->
+        <tr>
+          <td class="lbl"><label for="passid2">Confirm Password <span class="req">*</span></label></td>
+          <td>
+            <input type="password" id="passid2" name="passid2"
+                   maxlength="30" size="22"
+                   placeholder="Type it again"
+                   tabindex="18"
+                   title="Confirm Password: type your password again exactly as you typed it above. They have to match."
+                   required
+                   oninput="checkPasswordMatch()"
+                   onblur="checkPasswordMatch()">
+            <br><span class="err-msg" id="passid2-err"></span>
+            <span id="match-label" class="hint"></span>
+          </td>
+        </tr>
+
+      </table>
+    </fieldset>
+
+    <!-- =====================================================
+         ACTION BUTTONS
+         Review: shows data in side panel
+         Validate: runs all JS checks, shows submit if clean
+         Submit: only appears when there are no errors
+         Reset: clears everything
+         ===================================================== -->
+    <div id="form-buttons">
+      <input type="button" id="btn-review"   value="&#128269; Review"      tabindex="19" onclick="showReview();">
+      <input type="button" id="btn-validate" value="&#10003; Validate"     tabindex="20" onclick="handleValidate();">
+      <input type="reset"  id="btn-reset"    value="&#10006; Start Over"   tabindex="21" onclick="resetForm();">
+      <!--
+        submit button starts hidden - only shows up when validate passes
+        with zero errors. This is the main HW3 requirement.
+      -->
+      <input type="button" id="btn-submit"   value="&#128228; Submit Form" tabindex="22"
+             style="display:none;"
+             onclick="doSubmit();">
+    </div>
+
+  </form>
+</div><!-- end left column -->
+
+<!-- =====================================================
+     RIGHT SIDE - REVIEW PANEL
+     Empty until user clicks Review or Validate
+     ===================================================== -->
+<div id="review-panel">
+  <div id="review-header">
+    <h3>&#128203; Review Your Information</h3>
+    <p class="review-subhead">Green = OK &nbsp;|&nbsp; Red = needs fixing</p>
+  </div>
+  <div id="review-body">
+    <p class="review-placeholder">Click <strong>&#128269; Review</strong> or <strong>&#10003; Validate</strong> to see your data here.</p>
+  </div>
+</div>
+
+</div><!-- end page-wrapper -->
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<div id="footer">
+  <div id="footer-left">
+    <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="15" cy="15" r="14" fill="#1a56db"/>
+      <rect x="11" y="4" width="8" height="22" rx="3" fill="#fff"/>
+      <rect x="4" y="11" width="22" height="8" rx="3" fill="#fff"/>
+    </svg>
+    <span class="footer-brand">Aabids Medical Clinic</span>
+  </div>
+  <div id="footer-center">
+    <button type="button" id="btn-contact"
+            onclick="alert('Aabids Medical Clinic\nPhone: (713) 555-9100\nEmail: info@aabidsmedical.com\n\nFor emergencies always call 911.');">
+      &#128222; Contact Us
+    </button>
+    <div id="social-links">
+      <a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a>
+      <span class="sep">|</span>
+      <a href="https://www.twitter.com" target="_blank" rel="noopener">Twitter / X</a>
+      <span class="sep">|</span>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <div id="footer-right">
+    PO BOX 18881<br>
+    Sugar Land, TX &nbsp;77496<br>
+    &copy; <span id="footer-year"></span> Aabids Medical Clinic
+  </div>
+</div>
+
+<!-- =====================================================
+     INLINE JS - just the page init stuff.
+     All validation is in validation.js
+     ===================================================== -->
+<script>
+  function initPage() {
+
+    // day and month arrays for the banner date
+    var days   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    var months = ["January","February","March","April","May","June",
+                  "July","August","September","October","November","December"];
+
+    var now = new Date();
+    var d   = now.getDate();
+    var sfx = (d===1||d===21||d===31)?"st":(d===2||d===22)?"nd":(d===3||d===23)?"rd":"th";
+
+    document.getElementById("dynamic-date").innerHTML =
+      "Today is: <strong>" + days[now.getDay()] + ", " +
+      months[now.getMonth()] + " " + d + sfx + ", " + now.getFullYear() + "</strong>";
+
+    document.getElementById("footer-year").textContent = now.getFullYear();
+
+    // DOB limits: max = yesterday (not today, you can't register the day you're born),
+    // min = 120 years ago
+    var yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    var maxDate = yesterday.toISOString().split("T")[0];
+
+    var minYear = new Date();
+    minYear.setFullYear(now.getFullYear() - 120);
+    var minDate = minYear.toISOString().split("T")[0];
+
+    document.getElementById("dob").setAttribute("max", maxDate);
+    document.getElementById("dob").setAttribute("min", minDate);
+  }
+</script>
+
+<!-- end of homework3.html -->
+</body>
+</html>
