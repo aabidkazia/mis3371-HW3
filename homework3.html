@@ -25,10 +25,10 @@
 
 <body onload="initPage();">
 
-<!-- =====================================================
+<!-- 
      BANNER
      Logo, clinic name, dynamic date
-     ===================================================== -->
+      -->
 <div id="banner">
   <div id="banner-logo">
     <!-- inline SVG cross, no external image file needed -->
@@ -47,9 +47,9 @@
   </div>
 </div>
 
-<!-- =====================================================
+<!-- 
      PAGE WRAPPER - form left, review panel right
-     ===================================================== -->
+      -->
 <div id="page-wrapper">
 
 <!-- LEFT: the form -->
@@ -75,9 +75,9 @@
         onsubmit="return false;"
         novalidate>
 
-    <!-- =====================================================
+    <!-- 
          BLOCK 1 - PERSONAL INFO
-         ===================================================== -->
+          -->
     <fieldset>
       <legend>&#128100; Block 1 &mdash; Personal Information</legend>
       <table class="form-table">
@@ -169,9 +169,9 @@
       </table>
     </fieldset>
 
-    <!-- =====================================================
+    <!-- 
          BLOCK 2 - CONTACT INFO
-         ===================================================== -->
+          -->
     <fieldset>
       <legend>&#128222; Block 2 &mdash; Contact Information</legend>
       <table class="form-table">
@@ -216,9 +216,9 @@
       </table>
     </fieldset>
 
-    <!-- =====================================================
+    <!-- 
          BLOCK 3 - ADDRESS
-         ===================================================== -->
+         -->
     <fieldset>
       <legend>&#127968; Block 3 &mdash; Home Address</legend>
       <table class="form-table">
@@ -353,10 +353,10 @@
       </table>
     </fieldset>
 
-    <!-- =====================================================
+    <!-- 
          BLOCK 4 - HEALTH AND CHOICES
          checkboxes, radio buttons, sliders, textarea
-         ===================================================== -->
+          -->
     <fieldset>
       <legend>&#9745; Block 4 &mdash; Health &amp; Preferences</legend>
 
@@ -501,11 +501,11 @@
 
     </fieldset>
 
-    <!-- =====================================================
+    <!-- 
          BLOCK 5 - ACCOUNT SETUP
          User ID with strict rules, password with strength check,
          confirm password with live match comparison
-         ===================================================== -->
+         -->
     <fieldset>
       <legend>&#128274; Block 5 &mdash; Account Setup</legend>
       <table class="form-table">
@@ -576,13 +576,13 @@
       </table>
     </fieldset>
 
-    <!-- =====================================================
+    <!-- 
          ACTION BUTTONS
          Review: shows data in side panel
          Validate: runs all JS checks, shows submit if clean
          Submit: only appears when there are no errors
          Reset: clears everything
-         ===================================================== -->
+          -->
     <div id="form-buttons">
       <input type="button" id="btn-review"   value="&#128269; Review"      tabindex="19" onclick="showReview();">
       <input type="button" id="btn-validate" value="&#10003; Validate"     tabindex="20" onclick="handleValidate();">
@@ -599,10 +599,10 @@
   </form>
 </div><!-- end left column -->
 
-<!-- =====================================================
+<!-- 
      RIGHT SIDE - REVIEW PANEL
      Empty until user clicks Review or Validate
-     ===================================================== -->
+     -->
 <div id="review-panel">
   <div id="review-header">
     <h3>&#128203; Review Your Information</h3>
@@ -615,9 +615,9 @@
 
 </div><!-- end page-wrapper -->
 
-<!-- =====================================================
+<!-- 
      FOOTER
-     ===================================================== -->
+      -->
 <div id="footer">
   <div id="footer-left">
     <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
@@ -647,10 +647,10 @@
   </div>
 </div>
 
-<!-- =====================================================
+<!-- 
      INLINE JS - just the page init stuff.
      All validation is in validation.js
-     ===================================================== -->
+      -->
 <script>
   function initPage() {
 
