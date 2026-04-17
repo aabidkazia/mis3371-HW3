@@ -1,113 +1,220 @@
 <!DOCTYPE html>
 <!--
-  Program name: thankyou.html
-  Author: Aabid Kazia
-  Date created: April 1, 2026
-  Date last edited: April 14, 2026
-  Version: 3.0
-  Description: Confirmation page for Aabids Medical Clinic.
-  Shows after a successful form submission. Same banner/footer as
-  the main form page so it looks consistent.
+  File: thankyou.html
+  Dev: Aabid (yeah, still me)
+  Created: 04/01/2026
+  Last tweak: 04/14/2026 (probably final... unless I change something again)
+
+  Quick note:
+  This page shows up after the form is submitted.
+  I tried to keep the header/footer the same as the main page so it doesn't feel weird.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aabids Medical Clinic - Submission Confirmed</title>
+  <title>Submission Confirmed - Aabids Medical Clinic</title>
+
+  <!-- main stylesheet -->
   <link href="style.css" rel="stylesheet">
+
   <style>
-    .ty-card { text-align: center; padding: 60px 30px; }
+    /* simple card in the center */
+    .ty-card {
+      text-align: center;
+      padding: 60px 30px;
+      /* might adjust spacing later if it feels too big */
+    }
+
     .check-circle {
-      width: 90px; height: 90px; background: #0ea47a; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 24px; font-size: 2.6rem; color: #fff;
-      box-shadow: 0 4px 20px rgba(14,164,122,.4);
+      width: 90px;
+      height: 90px;
+      background: #0ea47a;
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      margin: 0 auto 24px;
+      font-size: 2.6rem;
+      color: #fff;
+
+      box-shadow: 0 4px 20px rgba(14,164,122,.4); /* subtle glow */
     }
-    .ty-card h2 { font-size: 1.7rem; color: #0ea47a; border: none; margin-bottom: 16px; }
-    .ty-card p  { font-size: 1.05rem; color: #1b2c47; margin-bottom: 12px; line-height: 1.8; }
+
+    .ty-card h2 {
+      font-size: 1.7rem;
+      color: #0ea47a;
+      border: none;
+      margin-bottom: 16px;
+    }
+
+    .ty-card p {
+      font-size: 1.05rem;
+      color: #1b2c47;
+      margin-bottom: 12px;
+      line-height: 1.8;
+    }
+
     .back-btn {
-      display: inline-block; margin-top: 30px; padding: 11px 28px;
-      background: #1a56db; color: #fff; border-radius: 5px;
-      font-family: 'Palatino Linotype', serif; font-weight: bold;
-      text-decoration: none; transition: background 0.18s;
+      display: inline-block;
+      margin-top: 30px;
+      padding: 11px 28px;
+      background: #1a56db;
+      color: #fff;
+      border-radius: 5px;
+
+      font-family: 'Palatino Linotype', serif;
+      font-weight: bold;
+      text-decoration: none;
+
+      transition: background 0.18s;
     }
-    .back-btn:hover { background: #1040b0; color: #fff; }
+
+    .back-btn:hover {
+      background: #1040b0;
+      color: #fff;
+    }
   </style>
 </head>
+
 <body>
 
+<!-- ===== Banner (same as main page) ===== -->
 <div id="banner">
   <div id="banner-logo">
-    <svg width="72" height="72" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+    <!-- simple medical cross logo -->
+    <svg width="72" height="72" viewBox="0 0 72 72">
       <circle cx="36" cy="36" r="34" fill="#1a56db" stroke="#fff" stroke-width="3"/>
       <rect x="29" y="14" width="14" height="44" rx="5" fill="#fff"/>
       <rect x="14" y="29" width="44" height="14" rx="5" fill="#fff"/>
     </svg>
   </div>
+
   <div id="banner-text">
     <h1>Aabids Medical Clinic</h1>
-    <p id="dynamic-date"></p>
+    <p id="dynamic-date"></p> <!-- filled by JS -->
     <p id="banner-tagline">Your Health, Our Priority</p>
   </div>
 </div>
 
+<!-- ===== Main Content Wrapper ===== -->
 <div id="page-wrapper" style="display:block; max-width:720px; margin:36px auto;">
   <div id="main-content">
+
     <div class="ty-card">
+
+      <!-- checkmark circle -->
       <div class="check-circle">&#10004;</div>
+
       <h2>Thank You for Your Submission!</h2>
+
       <p>
         Your patient registration has been received successfully.<br>
-        We will be contacting you shortly to confirm your appointment.
+        We’ll reach out soon to confirm your appointment.
       </p>
+
       <p>
-        For urgent questions please call <strong>(713) 555-9100</strong>.<br>
-        For medical emergencies always call <strong>911</strong>.
+        For urgent questions call <strong>(713) 555-9100</strong>.<br>
+        For emergencies, please call <strong>911</strong>.
       </p>
-      <a href="homework3.html" class="back-btn">&larr; Back to Registration Form</a>
+
+      <!-- I debated making this a button instead -->
+      <a href="homework3.html" class="back-btn">
+        &larr; Back to Registration Form
+      </a>
+
+      <!--
+      <button>Go Back</button>
+      Tried this earlier but styling was annoying so I scrapped it
+      -->
+
     </div>
   </div>
 </div>
 
+<!-- ===== Footer ===== -->
 <div id="footer">
+
   <div id="footer-left">
-    <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+    <svg width="30" height="30" viewBox="0 0 30 30">
       <circle cx="15" cy="15" r="14" fill="#1a56db"/>
       <rect x="11" y="4" width="8" height="22" rx="3" fill="#fff"/>
       <rect x="4" y="11" width="22" height="8" rx="3" fill="#fff"/>
     </svg>
     <span class="footer-brand">Aabids Medical Clinic</span>
   </div>
+
   <div id="footer-center">
     <button type="button" id="btn-contact"
-            onclick="alert('Aabids Medical Clinic\nPhone: (713) 555-9100\nFor emergencies call 911');">
+      onclick="showContactInfo()"> <!-- moved alert to function -->
       &#128222; Contact Us
     </button>
+
     <div id="social-links">
-      <a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://www.facebook.com" target="_blank">Facebook</a>
       <span class="sep">|</span>
-      <a href="https://www.twitter.com" target="_blank" rel="noopener">Twitter / X</a>
+      <a href="https://www.twitter.com" target="_blank">Twitter / X</a>
     </div>
   </div>
+
   <div id="footer-right">
-    PO BOX 18881<br>Sugar Land, TX &nbsp;77496<br>
+    PO BOX 18881<br>
+    Sugar Land, TX 77496<br>
     &copy; <span id="footer-year"></span> Aabids Medical Clinic
   </div>
+
 </div>
 
 <script>
-  (function() {
-    var days   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    var months = ["January","February","March","April","May","June",
-                  "July","August","September","October","November","December"];
-    var now = new Date(), d = now.getDate();
-    var sfx = (d===1||d===21||d===31)?"st":(d===2||d===22)?"nd":(d===3||d===23)?"rd":"th";
-    document.getElementById("dynamic-date").innerHTML =
-      "Today is: <strong>"+days[now.getDay()]+", "+months[now.getMonth()]+" "+d+sfx+", "+now.getFullYear()+"</strong>";
-    document.getElementById("footer-year").textContent = now.getFullYear();
+  // wrapping everything so I don't leak variables globally
+  (function () {
+
+    // arrays for formatting date
+    var dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    var monthNames = ["January","February","March","April","May","June",
+                      "July","August","September","October","November","December"];
+
+    var today = new Date();
+
+    var dayNum = today.getDate();
+
+    // suffix logic (this always feels more complicated than it should be)
+    var suffix = "th";
+    if (dayNum === 1 || dayNum === 21 || dayNum === 31) suffix = "st";
+    else if (dayNum === 2 || dayNum === 22) suffix = "nd";
+    else if (dayNum === 3 || dayNum === 23) suffix = "rd";
+
+    // building date string manually (could've used toLocaleDateString but meh)
+    var formatted =
+      "Today is: <strong>" +
+      dayNames[today.getDay()] + ", " +
+      monthNames[today.getMonth()] + " " +
+      dayNum + suffix + ", " +
+      today.getFullYear() +
+      "</strong>";
+
+    document.getElementById("dynamic-date").innerHTML = formatted;
+
+    // set footer year (keep it current automatically)
+    document.getElementById("footer-year").textContent = today.getFullYear();
+
   })();
+
+
+  // separate function for contact button (cleaner than inline alert... I think)
+  function showContactInfo() {
+    alert(
+      "Aabids Medical Clinic\n" +
+      "Phone: (713) 555-9100\n" +
+      "For emergencies call 911"
+    );
+  }
+
+  // console.log("page loaded"); // debugging, might remove later
 </script>
 
-<!-- end of thankyou.html -->
+<!-- end of file (for real this time) -->
 </body>
 </html>
