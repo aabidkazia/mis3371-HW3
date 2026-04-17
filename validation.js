@@ -50,11 +50,11 @@
 */
 
 
-// =====================================================
+// 
 // ERROR TRACKING
 // keeps track of which fields have errors so we know
 // when it's safe to show the submit button
-// =====================================================
+// 
 
 // each key is a field ID, value is true if that field has an error
 var errorFlags = {};
@@ -95,9 +95,9 @@ function updateErrorBanner() {
 }
 
 
-// =====================================================
+//
 // ERROR MESSAGE DISPLAY HELPERS
-// =====================================================
+// 
 
 function showError(errId, message, fieldId) {
   var el = document.getElementById(errId);
@@ -118,11 +118,10 @@ function clearError(errId, fieldId) {
 }
 
 
-// =====================================================
+//
 // FORCE LOWERCASE
 // called onblur for email and userid fields
-// =====================================================
-
+// 
 function forceLowercase(fieldId) {
   var field = document.getElementById(fieldId);
   if (field) {
@@ -131,11 +130,11 @@ function forceLowercase(fieldId) {
 }
 
 
-// =====================================================
+// 
 // VALIDATE NAME (first name and last name)
 // called oninput and onblur
 // rules: 1-30 chars, letters/apostrophes/dashes only
-// =====================================================
+// 
 
 function validateName(fieldId, errId, label) {
   var field = document.getElementById(fieldId);
@@ -159,10 +158,10 @@ function validateName(fieldId, errId, label) {
 }
 
 
-// =====================================================
+// 
 // VALIDATE MIDDLE INITIAL
 // optional - if blank that's fine. if filled in must be one letter.
-// =====================================================
+// 
 
 function validateMI() {
   var val = document.getElementById("mi").value;
@@ -179,12 +178,12 @@ function validateMI() {
 }
 
 
-// =====================================================
+// 
 // VALIDATE DATE OF BIRTH
 // must be a real past date
 // can't be in the future
 // can't be more than 120 years ago
-// =====================================================
+// 
 
 function validateDOB() {
   var val = document.getElementById("dob").value;
@@ -214,14 +213,14 @@ function validateDOB() {
 }
 
 
-// =====================================================
+// 
 // SSN AUTO-FORMATTER
 // called oninput - inserts dashes automatically
 // after 3rd digit: XXX-
 // after 5th digit: XXX-XX-
 // result: XXX-XX-XXXX
 // also strips any non-digit characters the user types
-// =====================================================
+// 
 
 function formatSSN() {
   var field = document.getElementById("ssn");
@@ -272,11 +271,11 @@ function validateSSN() {
 }
 
 
-// =====================================================
+// 
 // VALIDATE EMAIL
 // checks for the @ symbol and a dot in the right places
 // also forces lowercase since email addresses are case-insensitive
-// =====================================================
+// 
 
 function validateEmail() {
   var field = document.getElementById("email");
@@ -298,13 +297,13 @@ function validateEmail() {
 }
 
 
-// =====================================================
+// 
 // PHONE AUTO-FORMATTER
 // called oninput - inserts dashes automatically
 // after 3rd digit: NNN-
 // after 6th digit: NNN-NNN-
 // result: NNN-NNN-NNNN
-// =====================================================
+// 
 
 function formatPhone() {
   var field = document.getElementById("phone");
@@ -343,11 +342,11 @@ function validatePhone() {
 }
 
 
-// =====================================================
+// 
 // VALIDATE ADDRESS
 // addr1 is required, addr2 is optional
 // both need 2-30 characters if filled in
-// =====================================================
+// 
 
 function validateAddress(fieldId, errId, isRequired) {
   var val = document.getElementById(fieldId).value.trim();
@@ -374,9 +373,9 @@ function validateAddress(fieldId, errId, isRequired) {
 }
 
 
-// =====================================================
+// 
 // VALIDATE CITY
-// =====================================================
+// 
 
 function validateCity() {
   var val = document.getElementById("city").value.trim();
@@ -398,9 +397,9 @@ function validateCity() {
 }
 
 
-// =====================================================
+// 
 // VALIDATE STATE
-// =====================================================
+// 
 
 function validateState() {
   var val = document.getElementById("state").value;
@@ -413,10 +412,10 @@ function validateState() {
 }
 
 
-// =====================================================
+// 
 // VALIDATE ZIP
 // exactly 5 digits, nothing else
-// =====================================================
+//
 
 function validateZip() {
   var val = document.getElementById("zip").value.trim();
@@ -434,10 +433,10 @@ function validateZip() {
 }
 
 
-// =====================================================
+// 
 // VALIDATE RADIO GROUPS
 // called onchange on each radio option
-// =====================================================
+// 
 
 function validateRadio(groupName, errId, message) {
   var val = getRadioValue(groupName);
@@ -450,11 +449,11 @@ function validateRadio(groupName, errId, message) {
 }
 
 
-// =====================================================
+// 
 // VALIDATE SYMPTOMS TEXTAREA
 // optional but blocks double quotes because they can
 // mess up database queries if stored
-// =====================================================
+// 
 
 function validateSymptoms() {
   var val = document.getElementById("symptoms").value;
@@ -467,7 +466,7 @@ function validateSymptoms() {
 }
 
 
-// =====================================================
+//
 // VALIDATE USER ID
 // rules from the assignment:
 //   - 5 to 20 characters
@@ -475,7 +474,7 @@ function validateSymptoms() {
 //   - letters, numbers, dash, underscore only
 //   - no spaces or other special characters
 //   - auto-lowercased
-// =====================================================
+// 
 
 function validateUserID() {
   var field = document.getElementById("userid");
@@ -515,7 +514,7 @@ function validateUserID() {
 }
 
 
-// =====================================================
+// 
 // VALIDATE PASSWORD
 // rules:
 //   - 8 to 30 characters
@@ -525,7 +524,7 @@ function validateUserID() {
 //   - cannot equal the user ID
 //   - no double quotes
 // also updates the live strength bar
-// =====================================================
+// 
 
 function validatePassword() {
   var pwd    = document.getElementById("passid").value;
@@ -605,11 +604,11 @@ function updateStrengthBar(pwd, bar, label) {
 }
 
 
-// =====================================================
+// 
 // CHECK PASSWORD MATCH
 // called oninput on both password fields
 // shows live green check or red X
-// =====================================================
+// 
 
 function checkPasswordMatch() {
   var p1    = document.getElementById("passid").value;
@@ -636,10 +635,10 @@ function checkPasswordMatch() {
 }
 
 
-// =====================================================
+// 
 // SLIDER FUNCTIONS
 // update the live value display next to each slider
-// =====================================================
+// 
 
 function updateSlider(sliderId, displayId, prefix, suffix) {
   var slider  = document.getElementById(sliderId);
@@ -659,13 +658,13 @@ function updateSalarySlider() {
 }
 
 
-// =====================================================
+// 
 // VALIDATE BUTTON HANDLER
 // this is the main one the professor asked for.
 // runs EVERY validator on every field, collects all errors,
 // then shows the submit button only if everything passes.
 // also builds the review panel at the same time.
-// =====================================================
+//
 
 function handleValidate() {
 
@@ -713,11 +712,11 @@ function handleValidate() {
 }
 
 
-// =====================================================
+//
 // REVIEW PANEL BUILDER
 // shows all entered data with pass/error status
 // does NOT reload the page - just updates the div innerHTML
-// =====================================================
+// 
 
 function showReview() {
   var frm  = document.patientForm;
@@ -822,11 +821,11 @@ function showReview() {
 }
 
 
-// =====================================================
+// 
 // SUBMIT
 // only gets called when the submit button is clicked
 // (which is only visible when there are zero errors)
-// =====================================================
+//
 
 function doSubmit() {
   // run all validators one final time just to be 100% sure
@@ -865,11 +864,11 @@ function doSubmit() {
 }
 
 
-// =====================================================
+// 
 // RESET THE WHOLE FORM
 // clears the error flags, review panel, strength bar,
 // error banner, and hides the submit button
-// =====================================================
+//
 
 function resetForm() {
   // clear all error flags
@@ -908,9 +907,9 @@ function resetForm() {
 }
 
 
-// =====================================================
+// 
 // HELPER: get selected radio button value
-// =====================================================
+// 
 
 function getRadioValue(groupName) {
   var radios = document.getElementsByName(groupName);
