@@ -21,6 +21,368 @@
   <title>Aabids Medical Clinic - Patient Registration</title>
   <link href="style.css" rel="stylesheet">
   <script src="validation.js"></script>
+
+  <!-- plain override styles - strips color, keeps everything readable -->
+  <style>
+    /* reset everything to black on white, plain fonts */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 14px;
+      background: #fff;
+      color: #000;
+    }
+
+    /* ---- BANNER ---- */
+    #banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 20px;
+      border-bottom: 2px solid #000;
+      background: #fff;
+    }
+
+    #banner-logo svg circle { fill: #000; stroke: #fff; }
+    #banner-logo svg rect   { fill: #fff; }
+
+    #banner-text h1 {
+      margin: 0 0 2px 0;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #000;
+    }
+
+    #banner-text p {
+      margin: 0;
+      font-size: 0.85em;
+      color: #000;
+    }
+
+    /* ---- PAGE WRAPPER ---- */
+    #page-wrapper {
+      display: flex;
+      gap: 20px;
+      padding: 16px 20px;
+      align-items: flex-start;
+    }
+
+    #main-content {
+      flex: 1 1 auto;
+    }
+
+    #main-content h2 {
+      margin: 0 0 6px 0;
+      font-size: 1.2em;
+      border-bottom: 1px solid #000;
+      padding-bottom: 4px;
+    }
+
+    .form-intro {
+      font-size: 0.85em;
+      margin: 0 0 12px 0;
+      color: #000;
+    }
+
+    /* ---- ERROR BANNER ---- */
+    #error-banner {
+      border: 1px solid #000;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      font-size: 0.85em;
+      background: #fff;
+      color: #000;
+    }
+
+    /* ---- FIELDSETS ---- */
+    fieldset {
+      border: 1px solid #000;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: #fff;
+    }
+
+    legend {
+      font-weight: bold;
+      font-size: 0.95em;
+      padding: 0 6px;
+      color: #000;
+    }
+
+    /* ---- FORM TABLE ---- */
+    .form-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .form-table td {
+      padding: 5px 4px;
+      vertical-align: top;
+    }
+
+    .lbl {
+      white-space: nowrap;
+      font-weight: bold;
+      width: 160px;
+      padding-right: 10px;
+    }
+
+    .inline-lbl {
+      font-weight: bold;
+    }
+
+    /* ---- INPUTS / SELECT / TEXTAREA ---- */
+    input[type="text"],
+    input[type="password"],
+    input[type="date"],
+    select,
+    textarea {
+      border: 1px solid #000;
+      background: #fff;
+      color: #000;
+      padding: 3px 5px;
+      font-family: inherit;
+      font-size: 1em;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: 2px solid #000;
+      outline-offset: 1px;
+    }
+
+    /* range slider - keep functional but plain */
+    input[type="range"] {
+      accent-color: #000;
+    }
+
+    /* ---- ERROR MESSAGES ---- */
+    .err-msg {
+      color: #000;
+      font-size: 0.8em;
+      font-style: italic;
+    }
+
+    /* underline instead of red color to signal errors */
+    .err-msg:not(:empty)::before {
+      content: "⚠ ";
+    }
+
+    /* ---- HINTS ---- */
+    .hint {
+      font-size: 0.78em;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* ---- REQUIRED STAR ---- */
+    .req {
+      color: #000;
+      font-weight: bold;
+    }
+
+    /* ---- CHECKBOXES / RADIO ---- */
+    .checkbox-group,
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+    }
+
+    .cb-label,
+    .rb-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    /* ---- SLIDER ROW ---- */
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .slider-end {
+      font-size: 0.8em;
+      text-align: center;
+      color: #000;
+    }
+
+    .slider-current {
+      font-size: 0.85em;
+      color: #000;
+    }
+
+    /* ---- PASSWORD STRENGTH BAR ---- */
+    #strength-bar-wrap {
+      width: 140px;
+      height: 6px;
+      border: 1px solid #000;
+      margin-top: 4px;
+      background: #fff;
+    }
+
+    #strength-bar {
+      height: 100%;
+      width: 0%;
+      background: #000;
+      transition: width 0.2s;
+    }
+
+    #strength-label,
+    #match-label {
+      font-size: 0.78em;
+      color: #000;
+      font-style: italic;
+    }
+
+    /* ---- BUTTONS ---- */
+    #form-buttons {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    input[type="button"],
+    input[type="reset"] {
+      border: 1px solid #000;
+      background: #fff;
+      color: #000;
+      padding: 5px 14px;
+      font-family: inherit;
+      font-size: 0.9em;
+      cursor: pointer;
+    }
+
+    input[type="button"]:hover,
+    input[type="reset"]:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    /* submit button - slightly bolder border to stand out a bit */
+    #btn-submit {
+      border-width: 2px;
+      font-weight: bold;
+    }
+
+    /* ---- REVIEW PANEL ---- */
+    #review-panel {
+      width: 280px;
+      flex-shrink: 0;
+      border: 1px solid #000;
+      padding: 12px;
+      background: #fff;
+      font-size: 0.85em;
+      position: sticky;
+      top: 10px;
+      align-self: flex-start;
+    }
+
+    #review-header h3 {
+      margin: 0 0 4px 0;
+      font-size: 1em;
+      border-bottom: 1px solid #000;
+      padding-bottom: 4px;
+    }
+
+    .review-subhead {
+      font-size: 0.8em;
+      margin: 4px 0 10px 0;
+      color: #333;
+    }
+
+    .review-placeholder {
+      font-style: italic;
+      color: #555;
+    }
+
+    /* ---- SECTION NOTE ---- */
+    .section-note {
+      font-size: 0.85em;
+      margin: 4px 0 6px 0;
+      font-style: italic;
+    }
+
+    /* ---- FOOTER ---- */
+    #footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      border-top: 2px solid #000;
+      background: #fff;
+      font-size: 0.82em;
+      color: #000;
+    }
+
+    #footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #footer-left svg circle { fill: #000; }
+    #footer-left svg rect   { fill: #fff; }
+
+    .footer-brand {
+      font-weight: bold;
+    }
+
+    #footer-center {
+      text-align: center;
+    }
+
+    #btn-contact {
+      border: 1px solid #000;
+      background: #fff;
+      color: #000;
+      padding: 4px 12px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9em;
+      margin-bottom: 6px;
+    }
+
+    #btn-contact:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    #social-links a {
+      color: #000;
+      text-decoration: underline;
+    }
+
+    .sep {
+      margin: 0 4px;
+      color: #000;
+    }
+
+    #footer-right {
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    kbd {
+      border: 1px solid #000;
+      padding: 1px 4px;
+      font-size: 0.85em;
+      background: #f5f5f5;
+    }
+  </style>
 </head>
 
 <body onload="initPage();">
@@ -31,11 +393,9 @@
       -->
 <div id="banner">
   <div id="banner-logo">
-    <!-- inline SVG cross, no external image file needed -->
-    <svg width="72" height="72" viewBox="0 0 72 72"
+    <svg width="52" height="52" viewBox="0 0 72 72"
          xmlns="http://www.w3.org/2000/svg" aria-label="Aabids Medical Clinic logo">
-      <circle cx="36" cy="36" r="34" fill="#1a56db" stroke="#fff" stroke-width="3"/>
-      <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+      <circle cx="36" cy="36" r="34" fill="#000" stroke="#fff" stroke-width="3"/>
       <rect x="29" y="14" width="14" height="44" rx="5" fill="#fff"/>
       <rect x="14" y="29" width="44" height="14" rx="5" fill="#fff"/>
     </svg>
@@ -59,7 +419,7 @@
   <p class="form-intro">
     Fields marked <span class="req">*</span> are required.
     Hover over any field for help. Use <kbd>Tab</kbd> to move between fields.
-    Errors will appear below each field as you go — fix them all before submitting.
+    Errors will appear below each field as you go &mdash; fix them all before submitting.
   </p>
 
   <!-- error count banner - hidden until there are actual errors -->
@@ -86,11 +446,6 @@
         <tr>
           <td class="lbl"><label for="fname">Name <span class="req">*</span></label></td>
           <td>
-            <!--
-              oninput: validates as they type
-              onblur: validates when they leave the field
-              keeping HTML pattern too just in case
-            -->
             <input type="text" id="fname" name="fname"
                    maxlength="30" size="16"
                    placeholder="First Name"
@@ -122,7 +477,6 @@
                    required
                    oninput="validateName('lname', 'lname-err', 'Last Name')"
                    onblur="validateName('lname', 'lname-err', 'Last Name')">
-            <!-- error messages below, pre-spaced so page doesn't jump -->
             <br>
             <span class="err-msg" id="fname-err"></span>
             <span class="err-msg" id="mi-err"></span>
@@ -130,7 +484,7 @@
           </td>
         </tr>
 
-        <!-- Date of Birth - type=date with min/max set in initPage() -->
+        <!-- Date of Birth -->
         <tr>
           <td class="lbl"><label for="dob">Date of Birth <span class="req">*</span></label></td>
           <td>
@@ -145,11 +499,7 @@
           </td>
         </tr>
 
-        <!--
-          SSN - type=password to obscure digits.
-          ADVANCED: auto-formats XXX-XX-XXXX as user types
-          (dashes insert automatically after 3rd and 5th digit)
-        -->
+        <!-- SSN -->
         <tr>
           <td class="lbl"><label for="ssn">Social Security # <span class="req">*</span></label></td>
           <td>
@@ -162,7 +512,7 @@
                    oninput="formatSSN()"
                    onblur="validateSSN()">
             <br><span class="err-msg" id="ssn-err"></span>
-            <span class="hint">&#128274; Digits only. Dashes are added for you automatically.</span>
+            <span class="hint">Digits only. Dashes are added for you automatically.</span>
           </td>
         </tr>
 
@@ -179,10 +529,6 @@
         <tr>
           <td class="lbl"><label for="email">Email Address <span class="req">*</span></label></td>
           <td>
-            <!--
-              forces lowercase on blur since email addresses should be lowercase.
-              validates format name@domain.tld with regex
-            -->
             <input type="text" id="email" name="email"
                    maxlength="80" size="34"
                    placeholder="name@domain.com"
@@ -199,7 +545,6 @@
         <tr>
           <td class="lbl"><label for="phone">Phone Number</label></td>
           <td>
-            <!-- auto-formats NNN-NNN-NNNN as user types -->
             <input type="text" id="phone" name="phone"
                    maxlength="12" size="14"
                    placeholder="713-555-1234"
@@ -239,7 +584,6 @@
           </td>
         </tr>
 
-        <!-- addr2 optional but still validated if filled in -->
         <tr>
           <td class="lbl"><label for="addr2">Address Line 2</label></td>
           <td>
@@ -255,7 +599,7 @@
           </td>
         </tr>
 
-        <!-- City, State, ZIP all on same row -->
+        <!-- City, State, ZIP -->
         <tr>
           <td class="lbl"><label for="city">City / State / ZIP <span class="req">*</span></label></td>
           <td>
@@ -270,7 +614,6 @@
                    onblur="validateCity()">
             &nbsp;
             <label for="state" class="inline-lbl">State <span class="req">*</span></label>
-            <!-- blank first option forces user to pick something -->
             <select id="state" name="state" tabindex="11"
                     title="State: pick your state. You have to choose one, there is no default."
                     onchange="validateState()">
@@ -330,10 +673,6 @@
             </select>
             &nbsp;
             <label for="zip" class="inline-lbl">ZIP <span class="req">*</span></label>
-            <!--
-              type=text NOT type=number - number strips leading zeros.
-              ZIP codes like 07302 would break if we used number type.
-            -->
             <input type="text" id="zip" name="zip"
                    maxlength="5" size="7"
                    placeholder="77496"
@@ -355,12 +694,10 @@
 
     <!-- 
          BLOCK 4 - HEALTH AND CHOICES
-         checkboxes, radio buttons, sliders, textarea
-          -->
+         -->
     <fieldset>
       <legend>&#9745; Block 4 &mdash; Health &amp; Preferences</legend>
 
-      <!-- CHECKBOXES - at least 5 required -->
       <p class="section-note">Check everything below that applies to your medical history:</p>
       <table class="form-table">
         <tr>
@@ -391,7 +728,6 @@
         </tr>
       </table>
 
-      <!-- RADIO BUTTONS - 3 sets -->
       <table class="form-table" style="margin-top:10px;">
         <tr>
           <td class="lbl">Gender <span class="req">*</span></td>
@@ -441,7 +777,6 @@
         </tr>
       </table>
 
-      <!-- SLIDER 1 - health score with live display -->
       <table class="form-table" style="margin-top:12px;">
         <tr>
           <td class="lbl">
@@ -461,7 +796,6 @@
           </td>
         </tr>
 
-        <!-- SLIDER 2 - salary with live dollar formatting -->
         <tr>
           <td class="lbl">
             <label for="salaryBar">Desired Salary</label>
@@ -481,7 +815,6 @@
         </tr>
       </table>
 
-      <!-- TEXTAREA - optional, no quotes allowed -->
       <table class="form-table" style="margin-top:8px;">
         <tr>
           <td class="lbl"><label for="symptoms">Current Symptoms</label></td>
@@ -503,21 +836,11 @@
 
     <!-- 
          BLOCK 5 - ACCOUNT SETUP
-         User ID with strict rules, password with strength check,
-         confirm password with live match comparison
          -->
     <fieldset>
       <legend>&#128274; Block 5 &mdash; Account Setup</legend>
       <table class="form-table">
 
-        <!--
-          User ID rules:
-          - 5 to 20 characters
-          - must start with a letter (not a number)
-          - letters, numbers, dash, underscore only
-          - no spaces or special characters
-          - auto-lowercased on blur
-        -->
         <tr>
           <td class="lbl"><label for="userid">User ID <span class="req">*</span></label></td>
           <td>
@@ -535,7 +858,6 @@
           </td>
         </tr>
 
-        <!-- Password - live strength meter, must meet 4 criteria -->
         <tr>
           <td class="lbl"><label for="passid">Password <span class="req">*</span></label></td>
           <td>
@@ -548,7 +870,6 @@
                    oninput="validatePassword(); checkPasswordMatch()"
                    onblur="validatePassword()">
             <br><span class="err-msg" id="passid-err"></span>
-            <!-- strength bar -->
             <div id="strength-bar-wrap">
               <div id="strength-bar"></div>
             </div>
@@ -556,7 +877,6 @@
           </td>
         </tr>
 
-        <!-- Confirm password - live match check as you type -->
         <tr>
           <td class="lbl"><label for="passid2">Confirm Password <span class="req">*</span></label></td>
           <td>
@@ -576,21 +896,11 @@
       </table>
     </fieldset>
 
-    <!-- 
-         ACTION BUTTONS
-         Review: shows data in side panel
-         Validate: runs all JS checks, shows submit if clean
-         Submit: only appears when there are no errors
-         Reset: clears everything
-          -->
+    <!-- ACTION BUTTONS -->
     <div id="form-buttons">
       <input type="button" id="btn-review"   value="&#128269; Review"      tabindex="19" onclick="showReview();">
       <input type="button" id="btn-validate" value="&#10003; Validate"     tabindex="20" onclick="handleValidate();">
       <input type="reset"  id="btn-reset"    value="&#10006; Start Over"   tabindex="21" onclick="resetForm();">
-      <!--
-        submit button starts hidden - only shows up when validate passes
-        with zero errors. This is the main HW3 requirement.
-      -->
       <input type="button" id="btn-submit"   value="&#128228; Submit Form" tabindex="22"
              style="display:none;"
              onclick="doSubmit();">
@@ -599,10 +909,7 @@
   </form>
 </div><!-- end left column -->
 
-<!-- 
-     RIGHT SIDE - REVIEW PANEL
-     Empty until user clicks Review or Validate
-     -->
+<!-- RIGHT SIDE - REVIEW PANEL -->
 <div id="review-panel">
   <div id="review-header">
     <h3>&#128203; Review Your Information</h3>
@@ -615,13 +922,11 @@
 
 </div><!-- end page-wrapper -->
 
-<!-- 
-     FOOTER
-      -->
+<!-- FOOTER -->
 <div id="footer">
   <div id="footer-left">
-    <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="15" cy="15" r="14" fill="#1a56db"/>
+    <svg width="28" height="28" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="15" cy="15" r="14" fill="#000"/>
       <rect x="11" y="4" width="8" height="22" rx="3" fill="#fff"/>
       <rect x="4" y="11" width="22" height="8" rx="3" fill="#fff"/>
     </svg>
@@ -647,14 +952,10 @@
   </div>
 </div>
 
-<!-- 
-     INLINE JS - just the page init stuff.
-     All validation is in validation.js
-      -->
+<!-- INLINE JS - page init stuff. All validation is in validation.js -->
 <script>
   function initPage() {
 
-    // day and month arrays for the banner date
     var days   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     var months = ["January","February","March","April","May","June",
                   "July","August","September","October","November","December"];
@@ -669,8 +970,7 @@
 
     document.getElementById("footer-year").textContent = now.getFullYear();
 
-    // DOB limits: max = yesterday (not today, you can't register the day you're born),
-    // min = 120 years ago
+    // DOB limits: max = yesterday, min = 120 years ago
     var yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
     var maxDate = yesterday.toISOString().split("T")[0];
